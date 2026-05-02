@@ -35,7 +35,6 @@ export default function ListingsPage() {
 
   return (
     <>
-
       <div className="border-b border-border/60 bg-gradient-soft">
         <div className="container mx-auto px-4 py-6">
           <div className="flex items-start justify-between gap-6">
@@ -46,8 +45,8 @@ export default function ListingsPage() {
                 </Link>
                 <span>/</span>
                 <span className="text-foreground">
-            {category === "all" ? "All listings" : t(`cat.${category}`)}
-          </span>
+                  {category === "all" ? "All listings" : t(`cat.${category}`)}
+                </span>
               </div>
               <h1 className="mt-2 text-3xl font-bold tracking-tight">
                 {category === "all" ? "All listings" : t(`cat.${category}`)}
