@@ -15,7 +15,7 @@ import { Banner } from "@/components/Ads.tsx";
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/ListZona_Front">
       <div className="flex min-h-screen flex-col bg-background">
         <Header />
         <main className="flex-1 pb-20 md:pb-0">
