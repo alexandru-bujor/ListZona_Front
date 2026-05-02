@@ -6,7 +6,6 @@ import tsconfigPaths from "vite-tsconfig-paths";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss(), tsconfigPaths()],
-  base: "/ListZona_Front/",
   server: {
     host: "::",
     port: 8080,
