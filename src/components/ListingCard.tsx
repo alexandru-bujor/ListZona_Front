@@ -10,9 +10,9 @@ function formatPrice(p: number | null, label?: string) {
 }
 
 export function ListingCard({
-                              listing,
-                              view = "grid",
-                            }: {
+  listing,
+  view = "grid",
+}: {
   listing: Listing;
   view?: "grid" | "list";
 }) {

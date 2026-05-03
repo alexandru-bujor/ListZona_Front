@@ -7,14 +7,16 @@ import { intentConfig } from "@/constants/intentConfig.ts";
 const bannerVariants = cva("relative flex items-center gap-4 text-sm font-medium", {
   variants: {
     variant: {
-      top: ["w-full justify-center px-4 py-1.5", "bg-primary text-primary-foreground"],
+      top: ["w-full justify-center px-4 py-3", "bg-primary text-primary-foreground"],
       bottom: [
         "fixed bottom-0 left-0 right-0 z-50",
         "flex-col sm:flex-row justify-between px-4 py-3",
-        "border-t  bg-card/95 backdrop-blur-md shadow-lg",
+        "border-t bg-card/95 backdrop-blur-md shadow-lg",
       ],
-      inline: ["container mx-auto px-6 py-5", "border bg-card shadow-sm overflow-hidden"],
-      inline2: ["container mx-auto px-6 py-5", "border bg-card shadow-sm overflow-hidden"],
+      // single full-width banner
+      inline: ["w-full px-6 py-5", "border bg-card shadow-sm overflow-hidden"],
+      // multi-banner row — layout handled in JSX, variants just resets
+      inline2: ["w-full", ""],
       sidebar: [
         "w-full flex-col items-start mt-2 border-radius-2 px-5 py-5",
         "border bg-white shadow-sm overflow-hidden",
@@ -38,6 +40,8 @@ export interface BannerProps
   href?: string;
   ctaLabel?: string;
   onDismiss?: () => void;
+  /** inline2 only: 2 or 3 side-by-side tiles (default: 3) */
+  columns?: 2 | 3;
 }
 
 function CloseBtn({ onDismiss, className }: { onDismiss: () => void; className?: string }) {
@@ -67,9 +71,55 @@ function CloseBtn({ onDismiss, className }: { onDismiss: () => void; className?:
   );
 }
 
+/** Single tile used inside the inline2 grid */
+function BannerTile({
+                      cfg,
+                      href,
+                      ctaLabel,
+                      onDismiss,
+                    }: {
+  cfg: (typeof intentConfig)[keyof typeof intentConfig];
+  href: string;
+  ctaLabel?: string;
+  onDismiss?: () => void;
+}) {
+  return (
+    <div className="relative flex items-center gap-4 border bg-card px-5 py-8 shadow-sm overflow-hidden">
+      <div
+        className={cn(
+          "flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl text-2xl",
+          cfg.accent.icon,
+        )}
+      >
+        {cfg.icon}
+      </div>
+      <div className="min-w-0 flex-1">
+        <p className="truncate text-base font-bold">{cfg.headline}</p>
+        <p className="truncate text-sm text-muted-foreground">{cfg.body}</p>
+      </div>
+      <a
+        href={href}
+        className="shrink-0 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition-colors"
+      >
+        {ctaLabel ?? "Try free"}
+      </a>
+      {onDismiss && <CloseBtn onDismiss={onDismiss} className="absolute right-2 top-2" />}
+    </div>
+  );
+}
+
 export const Banner = React.forwardRef<HTMLDivElement, BannerProps>(
   (
-    { className, variant = "inline", intent = "promo", href = "#", ctaLabel, onDismiss, ...props },
+    {
+      className,
+      variant = "inline",
+      intent = "promo",
+      href = "#",
+      ctaLabel,
+      onDismiss,
+      columns = 3,
+      ...props
+    },
     ref,
   ) => {
     const cfg = intentConfig[intent!];
@@ -141,72 +191,59 @@ export const Banner = React.forwardRef<HTMLDivElement, BannerProps>(
           ref={ref}
           role="complementary"
           aria-label="Advertisement"
-          className={cn(bannerVariants({ variant, intent }), `bg-amber-300`, className)}
+          className={cn(bannerVariants({ variant, intent }), className)}
           {...props}
         >
-          {/* Icon — bigger */}
           <div
             className={cn(
-              "flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl text-3xl",
+              "flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl text-2xl",
               cfg.accent.icon,
             )}
           >
             {cfg.icon}
           </div>
-
-          {/* Text — bigger */}
           <div className="min-w-0 flex-1">
             <p className="truncate text-lg font-bold">{cfg.headline}</p>
             <p className="truncate text-sm text-muted-foreground">{cfg.body}</p>
           </div>
-
-          {/* CTA — bigger */}
           <a
             href={href}
             className="shrink-0 rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition-colors"
           >
             {ctaLabel ?? "Try free"}
           </a>
-
           {onDismiss && <CloseBtn onDismiss={onDismiss} className="absolute right-2 top-2" />}
         </div>
       );
     }
 
     if (variant === "inline2") {
+      const intents = Object.keys(intentConfig) as (keyof typeof intentConfig)[];
+      const tiles = intents.slice(0, columns);
+
       return (
         <div
           ref={ref}
           role="complementary"
           aria-label="Advertisement"
-          className={cn(bannerVariants({ variant, intent }), className)}
+          className={cn(
+            "w-full grid gap-px bg-border",
+            columns === 2
+              ? "grid-cols-1 sm:grid-cols-2"
+              : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3",
+            className,
+          )}
           {...props}
         >
-          {/* Icon — bigger */}
-          <div
-            className={cn(
-              "flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl text-3xl",
-              cfg.accent.icon,
-            )}
-          >
-            {cfg.icon}
-          </div>
-
-          {/* Text — bigger */}
-          <div className="min-w-0 flex-1">
-            <p className="truncate text-lg font-bold">{cfg.headline}</p>
-            <p className="truncate text-sm text-muted-foreground">{cfg.body}</p>
-          </div>
-
-          {/* CTA — bigger */}
-          <a
-            href={href}
-            className="shrink-0 rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition-colors"
-          >
-            {ctaLabel ?? "Try free"}
-          </a>
-
-          {onDismiss && <CloseBtn onDismiss={onDismiss} className="absolute right-2 top-2" />}
+          {tiles.map((key) => (
+            <BannerTile
+              key={key}
+              cfg={intentConfig[key]}
+              href={href}
+              ctaLabel={ctaLabel}
+              onDismiss={onDismiss}
+            />
+          ))}
         </div>
       );
     }

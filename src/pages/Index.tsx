@@ -79,9 +79,9 @@ export default function Index() {
       </section>
 
       {/* AD BANNER — full width container */}
-      <div className="mx-auto max-w-screen-2xl px-6 lg:px-10">
-        <Banner variant={"inline2"} />
-      </div>
+        <div className="px-8">
+          <Banner variant={"inline2"} />
+        </div>
 
       {/* FEATURED — bigger section, bigger gap */}
       <section className="mx-auto max-w-screen-2xl px-6 lg:px-10 py-16">
