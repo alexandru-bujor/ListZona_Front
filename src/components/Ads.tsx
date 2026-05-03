@@ -73,11 +73,11 @@ function CloseBtn({ onDismiss, className }: { onDismiss: () => void; className?:
 
 /** Single tile used inside the inline2 grid */
 function BannerTile({
-                      cfg,
-                      href,
-                      ctaLabel,
-                      onDismiss,
-                    }: {
+  cfg,
+  href,
+  ctaLabel,
+  onDismiss,
+}: {
   cfg: (typeof intentConfig)[keyof typeof intentConfig];
   href: string;
   ctaLabel?: string;
