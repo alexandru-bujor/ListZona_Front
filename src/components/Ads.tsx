@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import listZonaLogo from "@/assets/listzona-logo.png";
 import { intentConfig } from "@/constants/intentConfig.ts";
 
-const bannerVariants = cva("relative flex items-center gap-3 text-sm font-medium", {
+const bannerVariants = cva("relative flex items-center gap-4 text-sm font-medium", {
   variants: {
     variant: {
       top: ["w-full justify-center px-4 py-1.5", "bg-primary text-primary-foreground"],
@@ -13,7 +13,8 @@ const bannerVariants = cva("relative flex items-center gap-3 text-sm font-medium
         "flex-col sm:flex-row justify-between px-4 py-3",
         "border-t  bg-card/95 backdrop-blur-md shadow-lg",
       ],
-      inline: ["container mx-auto px-4 px-4 py-3.5", "border  bg-card shadow-sm overflow-hidden"],
+      inline: ["container mx-auto px-6 py-5", "border bg-card shadow-sm overflow-hidden"],
+      inline2: ["container mx-auto px-6 py-5", "border bg-card shadow-sm overflow-hidden"],
       sidebar: [
         "w-full flex-col items-start mt-2 border-radius-2 px-5 py-5",
         "border bg-white shadow-sm overflow-hidden",
@@ -143,25 +144,69 @@ export const Banner = React.forwardRef<HTMLDivElement, BannerProps>(
           className={cn(bannerVariants({ variant, intent }), `bg-amber-300`, className)}
           {...props}
         >
+          {/* Icon — bigger */}
           <div
             className={cn(
-              "flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-xl",
+              "flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl text-3xl",
               cfg.accent.icon,
             )}
           >
             {cfg.icon}
           </div>
+
+          {/* Text — bigger */}
           <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-semibold">{cfg.headline}</p>
-            <p className="truncate text-xs text-muted-foreground">{cfg.body}</p>
+            <p className="truncate text-lg font-bold">{cfg.headline}</p>
+            <p className="truncate text-sm text-muted-foreground">{cfg.body}</p>
           </div>
+
+          {/* CTA — bigger */}
           <a
             href={href}
-            className="shrink-0 rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground hover:bg-primary/90 transition-colors"
+            className="shrink-0 rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition-colors"
           >
             {ctaLabel ?? "Try free"}
           </a>
-          {onDismiss && <CloseBtn onDismiss={onDismiss} className="absolute right-1.5 top-1.5" />}
+
+          {onDismiss && <CloseBtn onDismiss={onDismiss} className="absolute right-2 top-2" />}
+        </div>
+      );
+    }
+
+    if (variant === "inline2") {
+      return (
+        <div
+          ref={ref}
+          role="complementary"
+          aria-label="Advertisement"
+          className={cn(bannerVariants({ variant, intent }), className)}
+          {...props}
+        >
+          {/* Icon — bigger */}
+          <div
+            className={cn(
+              "flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl text-3xl",
+              cfg.accent.icon,
+            )}
+          >
+            {cfg.icon}
+          </div>
+
+          {/* Text — bigger */}
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-lg font-bold">{cfg.headline}</p>
+            <p className="truncate text-sm text-muted-foreground">{cfg.body}</p>
+          </div>
+
+          {/* CTA — bigger */}
+          <a
+            href={href}
+            className="shrink-0 rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition-colors"
+          >
+            {ctaLabel ?? "Try free"}
+          </a>
+
+          {onDismiss && <CloseBtn onDismiss={onDismiss} className="absolute right-2 top-2" />}
         </div>
       );
     }
